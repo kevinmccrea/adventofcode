@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 
-f = open('input', 'r')
-data = f.readline().strip()
+import sys
+
+infilename = 'input.txt'
+if len(sys.argv) > 2 and sys.argv[1] == '-i':
+    infilename = sys.argv[2]
+
+print 'Using input file: %s' % infilename
+
+f = open(infilename, 'r')
+data = f.readlines()
 f.close()
 
 
