@@ -59,5 +59,71 @@ while pc >= 0 and pc < len(data):
 
     #print ops, regs
 
-print rec_freq
+print "Part 1: %d" % rec_freq
+
+class proc:
+    def __init__(self, id, send_queue, recv_queue):
+        self.id = id
+        self.pc = 0
+        self.regs = collections.defaultdict(int)
+        self.regs['p'] = id
+        self.send_queue = send_queue
+        self.recv_queue = recv_queue
+        self.num_sends = 0
+        self.blocked = False
+        self.done = False
+
+    def step(self, code):
+        ops = code[self.pc].split()
+        #print ops
         
+        if self.pc < 0 or self.pc >= len(code):
+            self.done = True
+            return
+
+        offset = 1
+
+        op = ops[0]
+        if op == 'snd':
+            val = deref(self.regs, ops[1])
+            self.send_queue.append(val)
+            #print "proc %d sending %d" % (self.id, val)
+            self.num_sends += 1
+        elif op == 'set':
+            self.regs[ops[1]] = deref(self.regs, ops[2])
+        elif op == 'add':
+            self.regs[ops[1]] += deref(self.regs, ops[2])
+        elif op == 'mul':
+            self.regs[ops[1]] *= deref(self.regs, ops[2])
+        elif op == 'mod':
+            self.regs[ops[1]] %= deref(self.regs, ops[2])
+        elif op == 'rcv':
+            if len(self.recv_queue) > 0:
+                self.blocked = False
+                val = self.recv_queue.pop(0)
+                self.regs[ops[1]] = val
+                #print "proc %d recv %d" % (self.id, val)
+            else:
+                offset = 0
+                self.blocked = True
+
+        elif op == 'jgz':
+            if deref(self.regs, ops[1]) > 0:
+                offset = deref(self.regs, ops[2])
+        else:
+            print 'ERROR'
+
+        self.pc += offset
+
+queues = [[],[]]
+procs = [proc(0, queues[1], queues[0]), proc(1, queues[0], queues[1])]
+
+curr_proc = 0
+while (not procs[0].done or not procs[1].done) and not (procs[0].blocked and procs[1].blocked):
+    procs[curr_proc].step(data)
+    curr_proc = (curr_proc + 1) % len(procs)
+
+
+print "Part 2: %d" % procs[1].num_sends
+
+
