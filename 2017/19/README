@@ -1,0 +1,10 @@
+Completed part 1 with visual inspection combined with a lucky guess
+Completed part 2 using a text editor.
+- Removed all spaces
+- Noted character count (NC) in editor
+- Character count alone does not account for intersections
+    - searched for occurances of '-|' (CI) and noted count
+    - transposed entire input at python prompt
+    - searched for occurances of '|-' (CT) and noted count
+- Answer was NC + CI + CT
+
