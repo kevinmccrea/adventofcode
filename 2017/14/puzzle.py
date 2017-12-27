@@ -48,15 +48,58 @@ def knot_hash(hash_string):
 
     return  binascii.hexlify(bytearray(dense_hash))
 
+def get_adj_regions(disk, x, y):
+    regions = set()
+    if x > 0 and disk[x-1][y] != 0:
+        regions.add(disk[x-1][y])
+
+    if y > 0 and disk[x][y-1] != 0:
+        regions.add(disk[x][y-1])
+
+    return list(regions)
+
+def replace_region(disk, old, new):
+    for row in xrange(len(disk)):
+        for col in xrange(len(disk[row])):
+            if disk[row][col] == old:
+                disk[row][col] = new
+    #for sector in disk:
+    #    sector = [new if x == old else x for x in sector]
+
 salt = data[0].strip()
 
 #salt = 'flqrgnkx'
-disk = [knot_hash(salt+'-'+str(ii)) for ii in xrange(128)]
+hashes = [knot_hash(salt+'-'+str(ii)) for ii in xrange(128)]
 
 bits_set = 0
-for block in disk:    
-    for ch in block:
-        bits_set += format(int(ch,16), '04b').count('1')
+disk = []
+for hash in hashes:
+    sector = ''
+    for ch in hash:
+        sector += format(int(ch,16), '04b')
+    bits_set += sector.count('1')
+    disk.append([int(ch) for ch in sector])
 
 print 'Part 1: total bits set %d' % bits_set
+
+groups = set()
+next_group = 2
+for row in xrange(len(disk)):
+    for col in xrange(len(disk[row])):
+        if disk[row][col] == 1:
+            adj = get_adj_regions(disk, row, col)
+            if len(adj) == 0:
+                disk[row][col] = next_group;
+                groups.add(next_group)
+                next_group += 1
+            elif len(adj) == 1:
+                disk[row][col] = adj[0]
+            elif len(adj) == 2:
+                replace_region(disk, adj[1], adj[0])
+                disk[row][col] = adj[0]
+                groups.remove(adj[1])
+            else:
+                print 'ERROR'
+
+print 'Part 2: num regions %d' % len(groups)
 
