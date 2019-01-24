@@ -23,6 +23,7 @@ players = 30
 top = 5807
 
 players = 427
+top = 70723
 top = 7072300
 
 scores = [0] * players

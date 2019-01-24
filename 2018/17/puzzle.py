@@ -56,11 +56,10 @@ def grow(board, row, col, dir):
     layer = []
     done = False
     while not done:
-        if board[(row, col+dir)] == '.':
+        if board[(row, col+dir)] == '.' or board[(row,col+dir)] == '|':
             layer.append((row, col+dir))
             col += dir
             surface = board[(row+1, col)]
-            print surface
             if surface == '~' or surface == '#':
                 pass
             elif surface == '.':
@@ -89,11 +88,11 @@ def run_spring(board, spring):
     # drip down
     drips = []
     start_row, col = spring
-    row = start_row
+    row = start_row+1
     done = False
-    print 'dirps'
     while not done:
 
+        #if board[(row, col)] == '.' or board[(row, col)] == '|':
         if board[(row, col)] == '.':
             board[(row, col)] = '|'
             drips.append((row, col))
@@ -105,12 +104,11 @@ def run_spring(board, spring):
             return []
 
         row += 1
-    print drips
+
     # if surface is already a flow then quite
     if surface == '|':
         return []
 
-    print 'flow'
     # flow on surface up drip stack until new flows formed
     while len(new) == 0 and drips:
         start_row, start_col = drips.pop(-1)
@@ -118,12 +116,12 @@ def run_spring(board, spring):
         layer = create_layer(board, start_row, start_col)
 
         r,c = layer[0]
-        surface = board[(r-1, c)]
+        surface = board[(r+1, c)]
         if surface == '.' or surface == '|':
             new.append((r,c))
 
         r,c = layer[-1]
-        surface = board[(r-1, c)]
+        surface = board[(r+1, c)]
         if surface == '.' or surface == '|':
             new.append((r,c))
 
@@ -134,8 +132,6 @@ def run_spring(board, spring):
             water = '~'
         for w in layer:
             board[w] = water
-
-        print water
 
     return new
 
@@ -152,18 +148,47 @@ print_board(board, 20,50)
 
 print TOP, BOTTOM
 
-new_springs = set([(0,500)])
-done_springs = set()
-print new_springs
-while new_springs:
-    spring = new_springs.pop()
-    print spring
-    if spring in done_springs:
-        continue
+def flow(board):
+        
+    new_springs = set([(0,500)])
+    done_springs = set()
+    while new_springs:
+        spring = new_springs.pop()
+        #print 'spring',spring
+        if spring in done_springs:
+            continue
 
-    print 'running'
-    #new_springs.add(run_spring(board, spring))
-    s = run_spring(board, spring)
-    print s
-    print new_springs
-    done_springs.add(spring)
+        #print 'running'
+        #new_springs.add(run_spring(board, spring))
+        s = run_spring(board, spring)
+        #print s
+        #print new_springs
+        for ss in s:
+            new_springs.add(ss)
+        done_springs.add(spring)
+
+
+prev = None
+done = False
+while not done:
+
+    for k,v in board.items():
+        if v == '|':
+            board[k]='.'
+
+    flow(board)
+
+    #counts = collections.Counter(board.values())
+    counts = collections.Counter()
+    for k,v in board.items():
+        r,c = k
+        if r >= TOP and r <= BOTTOM:
+            counts[v] += 1
+    if prev == counts:
+        print prev, counts
+        done = True
+
+    prev = counts 
+
+#print_board(board, BOTTOM+1,200)
+print counts['~'] + counts['|']

@@ -21,7 +21,7 @@ init_dirs = {'v': (1,0), '^': (-1,0),
              '<': (0,-1), '>': (0,1)}
 cart_markers = ['v','^','<','>']
 
-turn_rots = [complex(0,1), complex(1,1), complex(0,-1)]
+turn_rots = [complex(0,1), complex(1,0), complex(0,-1)]
 
 print len(maze), len(maze[0])
 carts = []
@@ -50,7 +50,7 @@ def get_next(cart, mark):
         next_dir = (int(cpx_dir.real), int(cpx_dir.imag))
     else:
         print 'ERROR', mark
-        sys.exit()
+        raise Exception("DD")
 
     new_pos = add_tups(pos, next_dir)
     
@@ -59,6 +59,19 @@ def get_next(cart, mark):
 def is_collision(cart, carts):
     cols = [c for c in carts if c[0] == cart[0]]
     return len(cols) != 0
+
+def print_maze(maze, carts):
+    for rr in xrange(len(maze)):
+        line = []
+        for cc in xrange(len(maze[0])):
+            if is_collision(((rr,cc), (0,0), 0), carts):
+                line.append('X')
+            else:
+                line.append(maze[rr][cc])
+        print ''.join(line)
+
+print_maze(maze, carts)
+print carts
 
 done = False
 tick = 0
@@ -70,16 +83,37 @@ while not done:
     next_carts = []
     while len(carts):
         cart = carts.pop(0)
+        #try:
         new_cart = get_next(cart, maze[cart[0][0]][cart[0][1]])
+        if new_cart[1][0] == 1 and new_cart[1][1] == 1:
+            print cart, maze[cart[0][0]][cart[0][1]], new_cart
+            sys.exit()
+        #except:
+        #    print cart
+        #    print tick, carts, next_carts
+        #    print_maze(maze, carts+next_carts)
+
         if is_collision(new_cart, next_carts + carts):
             print 'BAM', new_cart[0][1], new_cart[0][0]
-            done = True
+            #done = True
+            next_carts = [cart for cart in next_carts if not (cart[0][0] == new_cart[0][0] and cart[0][1] == new_cart[0][1])]
+            carts = [cart for cart in carts if not (cart[0][0] == new_cart[0][0] and cart[0][1] == new_cart[0][1])]
         else:
             next_carts.append(new_cart)
 
     carts = list(next_carts)
 
+    #if tick < 1:
+    #    print_maze(maze, carts)
+    #else:
+    #    sys.exit()
+
+    if len(carts) == 1:
+        print carts
+        done = True
+
     tick += 1
+
 
 
 

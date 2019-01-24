@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import sys
+import collections
+import itertools
 
 infilename = 'input.txt'
 if len(sys.argv) > 2 and sys.argv[1] == '-i':
@@ -11,24 +13,15 @@ print 'Using input file: %s' % infilename
 f = open(infilename, 'r')
 data = f.readlines()
 f.close()
-class funcname(parameter_list)
-    pass
+
+data = [line.strip() for line in data]
+
+data = data[0]
+
+def expand(chars):
+    branches = []
+    dends = []
+
+    return (branches, dends)
 
 
-def build_sequeces(line):
-    seqs = []
-    for ch in line.strip():
-        if ch == '^':
-            # init
-            current = ''
-            heads = []
-        elif ch in ['NWES']:
-            current += ch
-        elif ch == '(':
-
-
-
-        elif ch == '$':
-            break
-
-    returnsdf seqs
