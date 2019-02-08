@@ -58,6 +58,9 @@ def astar(maze, start, end, directions, walls):
     return (prevs, costs)
 
 def path_route(prevs, costs, start, end):
+    if not prevs.has_key(end):
+        return None
+
     curr = end
     route = collections.deque()
     while curr != start:
@@ -66,7 +69,7 @@ def path_route(prevs, costs, start, end):
     return route
 
 def astar_route(maze, start, end, directions, walls):
-    prevs, costs = astar(maxe, start, end, directions, walls)
+    prevs, costs = astar(maze, start, end, directions, walls)
     return path_route(prevs, costs, start, end)
 
 if __name__ == '__main__':
