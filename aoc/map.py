@@ -72,6 +72,38 @@ def astar_route(maze, start, end, directions, walls):
     prevs, costs = astar(maze, start, end, directions, walls)
     return path_route(prevs, costs, start, end)
 
+class BaseGraph():
+    def neighbors(pos):
+        pass
+
+def astar_graph(graph, start, end):
+    frontier = []
+    frontier.append((start, 0))
+    prevs = { start: None }
+    costs = { start: 0 }
+
+    while len(frontier):
+        frontier.sort(key = lambda t: t[1])
+
+        current_pos, current_dist = frontier.pop(0)
+
+        if current_pos == end:
+            break
+
+        for next_pos, step_cost in graph.neighbors(current_pos):
+            next_cost = costs[current_pos] + step_cost
+            if next_pos not in costs or next_cost < costs[next_pos]:
+                costs[next_pos] = next_cost
+                dist = next_cost + mandist(next_pos, end) - 1
+                frontier.append((next_pos, dist))
+                prevs[next_pos] = current_pos
+
+    return (prevs, costs)
+
+def astar_route(graph, start, end):
+    prevs, costs = astar_graph(graph, start, end)
+    return path_route(prevs, costs, start, end)
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
