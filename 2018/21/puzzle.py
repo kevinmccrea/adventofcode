@@ -85,9 +85,12 @@ def run_op(inst, regs):
 ip = regs[ip_reg]
 
 lregs = list(regs)
-lregs[0] = int(sys.argv[1])
+if len(sys.argv) > 1:    
+    lregs[0] = int(sys.argv[1])
 regs = tuple(regs)
 
+first_run = True
+values = []
 while ip >= 0 and ip < len(data):
     #ip = regs[ip_reg]
     line = data[ip]
@@ -102,10 +105,14 @@ while ip >= 0 and ip < len(data):
 
     reg_before = regs
     regs = run_op(inst, regs)
-    if regs != reg_before:
-        print ip, reg_before, inst, regs
+    #if regs != reg_before:
+    #    print ip, reg_before, inst, regs
 
     ip = regs[ip_reg] + 1
+
+    if ip == 29:
+    #if ip == 6:
+        print regs
 
     
 print regs
