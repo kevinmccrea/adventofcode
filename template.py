@@ -4,6 +4,8 @@ import sys
 import collections
 import itertools
 
+import aoc
+
 infilename = 'input.txt'
 if len(sys.argv) > 2 and sys.argv[1] == '-i':
     infilename = sys.argv[2]
