@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import collections
 
+CARDINAL_DIRS = ((-1,0), (0,-1), (0,1), (1, 0))
+
 def mandist(point1, point2):
     """
     Returns the manhatten distance between two tuples of points
@@ -55,6 +57,24 @@ def find_players(maze, player_chars=None, background_chars=None, replace_char=No
                 maze[pos] = replace_char
     return player_list
             
+def in_bounds(pos, upper_bound, lower_bound=None):
+    """
+    Returns true of the given point is within the bounds
+    specified.  If a lower bound is not given, the origin
+    is assumed.
+
+    >>> in_bounds((1,1), (3,3))
+    True
+    >>> in_bounds((1,10), (3,3))
+    False
+    >>> in_bounds((1,1), (3,3), (2,2))
+    False
+    """
+    if not lower_bound:
+        lower_bound = [0] * len(upper_bound)
+
+    return all([pos[ii] >= lower_bound[ii] and pos[ii] <= upper_bound[ii] for ii in xrange(len(pos))])
+
 def astar(maze, start, end, directions, walls):
     frontier = []
     frontier.append((start, 0))
