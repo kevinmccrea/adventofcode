@@ -28,6 +28,33 @@ def tup_add(a, b):
     """
     return tuple([aa + bb for aa, bb in zip(a, b)])
 
+def create_maze(data):
+    """
+    Creates a maze given the text input definition of data.  The maze
+    is a dict of position tuples with the value being the text character at
+    that position.
+    """
+    maze = {}
+    for rr in xrange(len(data)):
+        for cc in xrange(len(data[0])):
+            maze[(rr,cc)] = data[rr][cc]
+    return maze
+
+def find_players(maze, player_chars=None, background_chars=None, replace_char=None):
+    """
+    Returns a list of the positions in a maze that contain any character
+    in the list of players.  If replace_char is specified, then the
+    player positions are replaced with the character specified effectively
+    removing them from the maze.
+    """
+    player_list = []
+    for pos, char in maze.iteritems():
+        if (player_chars and char in player_chars) or (background_chars and char not in background_chars):
+            player_list.append((pos, char))
+            if replace_char:
+                maze[pos] = replace_char
+    return player_list
+            
 def astar(maze, start, end, directions, walls):
     frontier = []
     frontier.append((start, 0))
@@ -100,7 +127,7 @@ def astar_graph(graph, start, end):
 
     return (prevs, costs)
 
-def astar_route(graph, start, end):
+def astar_graph_route(graph, start, end):
     prevs, costs = astar_graph(graph, start, end)
     return path_route(prevs, costs, start, end)
 
