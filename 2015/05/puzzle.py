@@ -2,7 +2,7 @@
 
 import re
 
-f = open('input', 'r')
+f = open('input.txt', 'r')
 data = f.readlines()
 f.close()
 

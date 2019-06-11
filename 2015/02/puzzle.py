@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-f = open('input', 'r')
+f = open('input.txt', 'r')
 
 total_sqft = 0
 total_ribbon = 0

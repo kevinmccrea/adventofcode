@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-f = open('input', 'r')
+f = open('input.txt', 'r')
 strlen = 0
 codelen = 0
 encodedlen = 0
@@ -15,8 +15,8 @@ print 'String len: %d' % strlen
 print 'Code len: %d' % codelen
 print 'Encoded len: %d' % encodedlen
 
-print 'Diff: %d' % (codelen - strlen)
-print 'Diff Encoded: %d' % (encodedlen - codelen)
+print 'Part 1 (Diff): %d' % (codelen - strlen)
+print 'Part 2 (Diff Encoded): %d' % (encodedlen - codelen)
 
-f.close
+f.close()
 

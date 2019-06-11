@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-f = open('input','r')
-data = f.readline()
+f = open('input.txt','r')
+data = f.readline().strip()
 f.close()
 
 print 'Read in %d characters' % len(data)

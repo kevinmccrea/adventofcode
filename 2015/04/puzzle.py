@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import md5
 
-f = open('input', 'r')
+f = open('input.txt', 'r')
 data = f.readline().strip()
 f.close()
 

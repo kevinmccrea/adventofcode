@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import itertools
 
-f = open('input', 'r')
+f = open('input.txt', 'r')
 
 routes = dict()
 cities = set()

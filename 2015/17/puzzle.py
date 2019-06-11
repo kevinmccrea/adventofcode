@@ -2,7 +2,7 @@
 
 import itertools
 
-f = open('input', 'r')
+f = open('input.txt', 'r')
 data = [int(str.strip()) for str in f.readlines()]
 f.close()
 

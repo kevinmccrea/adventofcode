@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-f = open('input', 'r')
+f = open('input.txt', 'r')
 data = f.readline().strip()
 f.close()
 
