@@ -151,6 +151,22 @@ def astar_graph_route(graph, start, end):
     prevs, costs = astar_graph(graph, start, end)
     return path_route(prevs, costs, start, end)
 
+def print_maze(maze, default='.'):
+    rows, cols = zip(*maze.keys())
+
+    min_r = min(rows)
+    min_c = min(cols)
+    max_r = max(rows)
+    max_c = max(cols)
+
+    for rr in xrange(min_r, max_r+1):
+        for cc in xrange(min_c, max_c+1):
+            if (rr,cc) in maze:
+                print maze[(rr,cc)],
+            else:
+                print default,
+        print ''
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
